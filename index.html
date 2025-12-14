@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="XRP 거래, 입금액, 출금, 배분액을 자동 계산하는 통합 금융 계산기">
+    <meta name="keywords" content="금융계산기, XRP, 바이낸스, 암호화폐, 계산기">
+    <title>통합 금융 계산기</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-calculator"></i>
+            </div>
+            <h1>금융 계산기</h1>
+            <p class="subtitle">4가지 계산기를 한 곳에서</p>
+        </div>
+
+        <!-- 탭 메뉴 -->
+        <div class="tab-menu">
+            <button class="tab-btn active" data-tab="xrp">
+                <i class="fas fa-coins"></i>
+                <span>XRP 거래</span>
+            </button>
+            <button class="tab-btn" data-tab="deposit">
+                <i class="fas fa-wallet"></i>
+                <span>입금액</span>
+            </button>
+            <button class="tab-btn" data-tab="withdrawal">
+                <i class="fas fa-hand-holding-usd"></i>
+                <span>출금</span>
+            </button>
+            <button class="tab-btn" data-tab="distribution">
+                <i class="fas fa-users"></i>
+                <span>배분액</span>
+            </button>
+            <button class="tab-btn" data-tab="history">
+                <i class="fas fa-database"></i>
+                <span>저장 데이터</span>
+            </button>
+        </div>
+
+        <!-- XRP 거래 계산기 -->
+        <div class="calculator-section active" id="xrp-calculator">
+            <div class="card">
+                <h2 class="section-title"><i class="fas fa-coins"></i> 바이낸스 XRP 거래 계산기</h2>
+                <form id="xrpForm">
+                    <div class="input-group">
+                        <label for="balance">
+                            <i class="fas fa-wallet"></i>
+                            기존 바이낸스 잔액 (USDT)
+                        </label>
+                        <input type="text" inputmode="decimal" id="balance" placeholder="금액 입력" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="xrpSent">
+                            <i class="fas fa-paper-plane"></i>
+                            XRP 전송액 (XRP)
+                        </label>
+                        <input type="text" inputmode="decimal" id="xrpSent" placeholder="금액 입력" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="usdtAfterSale">
+                            <i class="fas fa-exchange-alt"></i>
+                            바이낸스에서 XRP 매도 후 테더금액 (USDT)
+                        </label>
+                        <input type="text" inputmode="decimal" id="usdtAfterSale" placeholder="금액 입력" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-calculator"></i>
+                        계산하기
+                    </button>
+                </form>
+
+                <div id="xrpResult" class="result-section" style="display: none;">
+                    <h3><i class="fas fa-chart-line"></i> 계산 결과</h3>
+                    <div class="result-content">
+                        <pre id="xrpResultText"></pre>
+                    </div>
+                    <button class="btn btn-secondary" onclick="copyResult('xrpResultText')">
+                        <i class="fas fa-copy"></i>
+                        결과 복사
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 입금액 계산기 -->
+        <div class="calculator-section" id="deposit-calculator">
+            <div class="card">
+                <h2 class="section-title"><i class="fas fa-wallet"></i> 입금액 계산기</h2>
+                <form id="depositForm">
+                    <div class="input-group">
+                        <label for="depositAmount">
+                            <i class="fas fa-money-bill-wave"></i>
+                            오늘 입금액 (원)
+                        </label>
+                        <input type="text" inputmode="decimal" id="depositAmount" placeholder="금액 입력" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-calculator"></i>
+                        계산하기
+                    </button>
+                </form>
+
+                <div id="depositResult" class="result-section" style="display: none;">
+                    <h3><i class="fas fa-chart-pie"></i> 계산 결과</h3>
+                    <div class="result-content">
+                        <pre id="depositResultText"></pre>
+                    </div>
+                    <button class="btn btn-secondary" onclick="copyResult('depositResultText')">
+                        <i class="fas fa-copy"></i>
+                        결과 복사
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 출금 계산기 -->
+        <div class="calculator-section" id="withdrawal-calculator">
+            <div class="card">
+                <h2 class="section-title"><i class="fas fa-hand-holding-usd"></i> 출금 계산기</h2>
+                <form id="withdrawalForm">
+                    <div class="input-group">
+                        <label for="withdrawalRequest">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            출금 요청액 (USDT)
+                        </label>
+                        <input type="text" inputmode="decimal" id="withdrawalRequest" placeholder="금액 입력" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="wonAmount">
+                            <i class="fas fa-won-sign"></i>
+                            환매 후 원화금액 (원)
+                        </label>
+                        <input type="text" inputmode="decimal" id="wonAmount" placeholder="금액 입력" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-calculator"></i>
+                        계산하기
+                    </button>
+                </form>
+
+                <div id="withdrawalResult" class="result-section" style="display: none;">
+                    <h3><i class="fas fa-chart-line"></i> 계산 결과</h3>
+                    <div class="result-content">
+                        <pre id="withdrawalResultText"></pre>
+                    </div>
+                    <button class="btn btn-secondary" onclick="copyResult('withdrawalResultText')">
+                        <i class="fas fa-copy"></i>
+                        결과 복사
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 배분액 계산기 -->
+        <div class="calculator-section" id="distribution-calculator">
+            <div class="card">
+                <h2 class="section-title"><i class="fas fa-users"></i> 배분액 계산기</h2>
+                
+                <div class="info-card">
+                    <h3><i class="fas fa-link"></i> 출금 계산기 연동 데이터</h3>
+                    <div class="linked-data">
+                        <div class="data-item">
+                            <span class="label">출금 요청액:</span>
+                            <span class="value" id="linkedWithdrawal">-</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="label">고객 출금금액:</span>
+                            <span class="value" id="linkedCustomer">-</span>
+                        </div>
+                    </div>
+                    <p class="info-text">
+                        <i class="fas fa-info-circle"></i>
+                        출금 계산기에서 계산된 데이터가 자동으로 연동됩니다.
+                    </p>
+                </div>
+
+                <form id="distributionForm">
+                    <div class="input-group">
+                        <label for="customer1">
+                            <i class="fas fa-user"></i>
+                            고객1 (USDT)
+                        </label>
+                        <input type="text" inputmode="decimal" id="customer1" placeholder="금액 입력">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="customer2">
+                            <i class="fas fa-user"></i>
+                            고객2 (USDT)
+                        </label>
+                        <input type="text" inputmode="decimal" id="customer2" placeholder="금액 입력">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="customer3">
+                            <i class="fas fa-user"></i>
+                            고객3 (USDT)
+                        </label>
+                        <input type="text" inputmode="decimal" id="customer3" placeholder="금액 입력">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="customer4">
+                            <i class="fas fa-user"></i>
+                            고객4 (USDT)
+                        </label>
+                        <input type="text" inputmode="decimal" id="customer4" placeholder="금액 입력">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="customer5">
+                            <i class="fas fa-user"></i>
+                            고객5 (USDT)
+                        </label>
+                        <input type="text" inputmode="decimal" id="customer5" placeholder="금액 입력">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-calculator"></i>
+                        배분액 계산하기
+                    </button>
+                </form>
+
+                <div id="distributionResult" class="result-section" style="display: none;">
+                    <h3><i class="fas fa-chart-pie"></i> 배분 결과</h3>
+                    <div class="result-content">
+                        <pre id="distributionResultText"></pre>
+                    </div>
+                    <button class="btn btn-secondary" onclick="copyResult('distributionResultText')">
+                        <i class="fas fa-copy"></i>
+                        결과 복사
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 저장된 데이터 조회 -->
+        <div class="calculator-section" id="history-calculator">
+            <div class="card">
+                <h2 class="section-title"><i class="fas fa-database"></i> 저장된 데이터 조회</h2>
+                
+                <div class="history-tabs">
+                    <button class="history-tab-btn active" data-history-tab="xrp">XRP 거래</button>
+                    <button class="history-tab-btn" data-history-tab="deposit">입금액</button>
+                    <button class="history-tab-btn" data-history-tab="withdrawal">출금</button>
+                    <button class="history-tab-btn" data-history-tab="distribution">배분액</button>
+                </div>
+
+                <div class="history-controls">
+                    <button class="btn btn-primary" onclick="loadHistory()">
+                        <i class="fas fa-sync-alt"></i>
+                        데이터 불러오기
+                    </button>
+                    <button class="btn btn-success" onclick="copySelectedHistory()" style="display: none;" id="copySelectedBtn">
+                        <i class="fas fa-copy"></i>
+                        선택 항목 복사
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteSelectedHistory()" style="display: none;" id="deleteBtn">
+                        <i class="fas fa-trash"></i>
+                        선택 항목 삭제
+                    </button>
+                </div>
+
+                <div class="select-all-controls" style="display: none;" id="selectAllControls">
+                    <label class="select-all-label">
+                        <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll()">
+                        <span>전체 선택</span>
+                    </label>
+                </div>
+
+                <div id="historyContent" class="history-content">
+                    <p class="info-text">
+                        <i class="fas fa-info-circle"></i>
+                        위에서 조회할 데이터 유형을 선택하고 "데이터 불러오기" 버튼을 클릭하세요.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 복사 성공 알림 -->
+        <div id="copySuccess" class="copy-success" style="display: none;">
+            <i class="fas fa-check-circle"></i>
+            클립보드에 복사되었습니다!
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
