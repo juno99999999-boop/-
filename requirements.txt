@@ -1,0 +1,6 @@
+streamlit
+openai
+pdfplumber
+pandas
+python-docx
+python-pptx
